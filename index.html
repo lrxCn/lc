@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        let isMount = true;
+        let workInProgress = null;
+
+        const fiber = {
+            memorizedState:null,
+            stateNode:App
+        }
+
+        function schedule(){
+            workInProgress = fiber.memorizedState;
+            const app = fiber.stateNode();
+            isMount = false;
+            return app;
+        }
+
+        function useState(initialVal){
+            let hook;
+            if(isMount){
+                hook = {
+                    memorizedState:initialVal,
+                    next:null,
+                    queue:{
+                        pending:null
+                    }
+                }
+                if(hook.memorizedState){
+                    workInProgress.next = hook;
+                }else{
+                    fiber.memorizedState = hook;
+                }
+                workInProgress = hook;
+            }else{
+                hook = workInProgress;
+                workInProgress = workInProgress.next;
+            }
+
+            let baseState = hook.memorizedState;
+            if(hook.queue.pending){
+                let cur = hook.queue.pending.next;
+                do{
+                    const {action} = cur;
+                    baseState = action(baseState);
+                    cur = cur.next;
+                }while(cur!==hook.queue.pending.next);
+            }
+
+            hook.memorizedState = baseState;
+
+            return [baseState,dispatchAction.bind(this,hook.queue)]
+        }
+
+        function dispatchAction(queue,action){
+            const update = {
+                action,
+                next:null
+            }
+            if(queue.pending){
+                update.next = queue.pending.next;
+                queue.pending.next = update;
+            }else{
+                update.next = update;
+            }
+            queue.pending = update;
+
+            schedule();
+        }
+
+        function App(){
+            const [a,setA] = useState(0);
+
+            console.log(`a:${a}`)
+
+            return {
+                onClick(){
+                    setA(num=>num+1)
+                    setA(num=>num+1)
+                }
+            }
+        }
+
+        window.app = schedule();
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+wipRoot = {
+    要渲染的dom原点root,
+    dom: container
+    props: {
+        children: [element]
+    },
+    // 旧的fibertree
+    alternate:currentRoot,
+
+    hooks:[
+        {
+            // useState上保存的值
+            state:1,
+            // hook上发起的操作，比如很多setState
+            queue:[]
+        }
+    ]
+};
