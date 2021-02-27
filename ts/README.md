@@ -1,0 +1,1 @@
+[link](https://juejin.cn/search?query=%E6%89%8B%E6%92%95ts%E9%9D%A2%E8%AF%95%E9%A2%98%E2%80%94%E2%80%94%E4%B8%8D%E8%83%BD%E4%B8%8D%E6%8E%8C%E6%8F%A1%E7%9A%84ts%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7)
