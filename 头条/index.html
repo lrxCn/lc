@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="dBtn">debounce</button>
+    <button id="tBtn">throttle</button>
+    <script>
+        const debounce = (fn,timeout = 1000,_timer) => (...args)=>(
+            clearTimeout(_timer,(_timer = setTimeout(fn.bind(this,...args),timeout)))
+        )
+
+        const throttle = (fn,timeout = 1000,_flag=true) => (...args)=>(
+            _flag && setTimeout(()=>{
+                _flag = true;
+                fn.apply(this,args)},timeout
+            ) && (_flag = false)
+        )
+
+        window.onload = () => {
+            const now = Date.now();
+
+            const dBtn = document.getElementById('dBtn');
+            const tBtn = document.getElementById('tBtn');
+
+            const handleClick = name => console.log(`${name}:${Date.now() - now}`)
+
+            dBtn.addEventListener('click',debounce(handleClick).bind(this,'debounce'))
+            tBtn.addEventListener('click',throttle(handleClick).bind(this,'throttle'))
+        }
+    </script>
+</body>
+</html>
