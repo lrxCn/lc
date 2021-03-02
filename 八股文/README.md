@@ -10,7 +10,7 @@
 
 |  浏览器   | 内核  |
 |  ----  | ----  |
-| IE  | Trident |
+| IE  | Trident |v
 | Chrome  | Webkit、Blink |
 | Opera  | Presto、Blink |
 | FireFox  | Gecko |
@@ -255,6 +255,36 @@ const throttle = (fn, timeout = 500, isRunning) => () => {
 ```
 </details>
 
+
+<details>
+<summary>手写Object.assign</summary>
+
+```
+;(function(){
+   if(Object.assign){
+      return;
+   }
+
+   const isValid = v => new Set([null,void 0]).has(v);
+
+   Object.assign = (source,...rest) => {
+      if(!isValid(source)){
+         throw new Error('Can not convert null or undefined to object')
+      }
+      return rest.reduce((total,cur)=>{
+         if(isValid(cur)){
+            for(let key of cur){
+               if(Object.prototype.hasOwnProperty.call(cur,key)){
+                  total[key] = cur[key];
+               }
+            }
+         }
+         return total;
+      },Object(to));
+   }
+})()
+```
+</details>
 
 <details>
 <summary>手写Object.assign</summary>
